@@ -178,7 +178,7 @@ class Environment:
                     (self.screen_height + col * self.tile_size, row * self.tile_size, self.tile_size - 2, self.tile_size - 2)
                     )  
 
-                pr = str(self.probability_matrix[row][col])
+                pr = str(math.floor(self.probability_matrix[row][col] * 100)/100.0)
 
                 self.win.blit(font.render(pr, True, (255,255,255)), ( self.screen_height  + col * self.tile_size + 20, row * self.tile_size + 20))        
         
@@ -267,7 +267,7 @@ class Environment:
                 prob = pr_cell_given_obs_n1 / (pr_cell_given_obs_n1 + pr_not_cell_given_obs_n1)
             else:
                 prob = pr_cell_given_obs_n0 / (pr_cell_given_obs_n0 + pr_not_cell_given_obs_n0)
-            
+       
             self.probability_matrix[x][y] = prob
 
         return 
