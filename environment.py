@@ -294,7 +294,7 @@ class Environment:
     def get_best_viewpoints(self, candidate_viewpoints):
         cand_view_probs = [] 
 
-        print(f'total num cands = {len(candidate_viewpoints)}')
+        #print(f'total num cands = {len(candidate_viewpoints)}')
 
         for i in range(len(candidate_viewpoints)):
             candidate = candidate_viewpoints[i]
@@ -313,7 +313,7 @@ class Environment:
 
         best_five = sorted_cands[0:5]
 
-        print(f'the best 5 are {best_five}')
+        #print(f'the best 5 are {best_five}')
 
         return best_five
 

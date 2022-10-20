@@ -4,7 +4,7 @@ class Node:
     def __init__(self, value, coordinates, neighbors=None):
         self.x = coordinates[0]
         self.y = coordinates[1]
-        #self.theta = coordinates[2]
+        self.theta = coordinates[2]
         self.value = value
         self.heuristic_value = None
         self.distance_from_start = math.inf
