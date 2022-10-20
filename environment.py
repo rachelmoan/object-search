@@ -12,15 +12,15 @@ class Environment:
                  screen_height, 
                  fov=math.pi / 3, 
                  casted_rays=120, 
-                 map_length=8, 
-                 map_height=8,
+                 map_length=10, 
+                 map_height=10,
                  player_angle=math.pi
                  ):
 
         self.screen_height = 480
         self.display_environment = display_environment
         self.screen_width = screen_height * 2
-        self.map_size = 8
+        self.map_size = 10
         self.tile_size = ((self.screen_width / 2) / self.map_size)
         self.max_depth = int(self.map_size * self.tile_size)
         self.fov = fov
@@ -28,13 +28,13 @@ class Environment:
         self.casted_rays = casted_rays # no. of rays that we will cast
         self.step_angle = fov / casted_rays
         self.scale = (self.screen_width / 2) / casted_rays
-        self.map_length = 8
-        self.map_height = 8
+        self.map_length = 10
+        self.map_height = 10
 
         # The current location of the person controlling the point robot
         # is denoted as (player_x, player_y, player_angle)
-        self.player_x = (self.screen_width / 2) / 2
-        self.player_y = (self.screen_width / 2) / 2
+        self.player_x = self.tile_size*2
+        self.player_y = self.tile_size*2
         self.player_angle = player_angle
 
         self.obstacle_map = self.get_obstacle_map()
@@ -65,14 +65,16 @@ class Environment:
 
 
     def get_obstacle_map(self):
-        map = [[True, True, True, True, True, True, True, True], 
-       [True, False, False, False, True, True, False, True], 
-       [True, False, False, False, False, False, False, True],
-       [True, False, False, False, False, True, True, True],
-       [True, True, False, False, False, False, False, True],
-       [True, False, False, False, True, False, False, True],
-       [True, False, False, False, True, False, False, True],
-       [True, True, True, True, True, True, True, True]]
+        map = [[True, True, True, True, True, True, True, True, True, True], 
+       [True, False, False, False, True, True, False, False, False,True], 
+       [True, False, False, False, False, False, False, False, False,True],
+       [True, False, False, False, False, True, True, False, False,True],
+       [True, False, False, False, False, False, False, False, False,True],
+       [True, False, False, False, False, True, True, False, False,True],
+       [True, True, False, False, False, False, False, False, False,True],
+       [True, False, False, False, True, False, False, False, False,True],
+       [True, False, False, False, True, False, False, False, False,True],
+       [True, True, True, True, True, True, True, True, True, True]]
 
         return map
 
@@ -96,7 +98,7 @@ class Environment:
     def get_prob_map(self):
         image = cv2.imread("grid1.png",1)
 
-        results = self.read_as_digital(image, 60,[0,0],[0,0])
+        results = self.read_as_digital(image, int(self.tile_size),[0,0],[0,0])
         clean_results = []
 
         # clean up the result to be able to convert to heatmap
@@ -150,10 +152,6 @@ class Environment:
                          3)
 
     def colfunc(self, val, minval, maxval, startcolor, stopcolor):
-        """ Convert value in the range minval...maxval to a color in the range
-            startcolor to stopcolor. The colors passed and the one returned are
-            composed of a sequence of N component values (e.g. RGB).
-        """
         f = float(val-minval) / (maxval-minval)
         return tuple(100*(f*(b-a)+a) for (a, b) in zip(startcolor, stopcolor))
         
@@ -178,7 +176,9 @@ class Environment:
                     (self.screen_height + col * self.tile_size, row * self.tile_size, self.tile_size - 2, self.tile_size - 2)
                     )  
 
-                pr = str(math.floor(self.probability_matrix[row][col] * 100)/100.0)
+                pr = str(math.floor(self.probability_matrix[row][col] * 100000)/100000.0)
+
+                
 
                 self.win.blit(font.render(pr, True, (255,255,255)), ( self.screen_height  + col * self.tile_size + 20, row * self.tile_size + 20))        
         
@@ -198,11 +198,22 @@ class Environment:
                 col = int(target_x / self.tile_size)
                 row = int(target_y / self.tile_size)
 
+
+                # uncomment this block to draw visible cells in red
+                '''
+                if self.display_environment: 
+                    
+                    pygame.draw.rect(self.win,
+                                    (200,0,0) ,
+                                    (col * self.tile_size, row * self.tile_size, self.tile_size - 2, self.tile_size - 2)
+                                    ) 
+                '''
+
+
+
                 if ([row,col] not in visible_cells):
                     visible_cells.append([row,col])
     
-                #square = row * MAP_SIZE + col
-                #(target_y / TILE_SIZE) * MAP_SIZE + target_x / TILE_SIZE 
                 if self.obstacle_map[row][col]:
 
                     if self.display_environment: pygame.draw.line(self.win, (255,255,0),(x,y),(target_x,target_y))
@@ -213,15 +224,14 @@ class Environment:
                     wall_height = 21000 / (depth + 0.0001)
                     
                     if wall_height > self.screen_height: wall_height == self.screen_height
-                    
-                    # draw the current probabiliity map
-                    #draw_prob_map()
-                    
+
                     
                     break
         
             start_angle += self.step_angle
 
+
+        print(f"visible cells are {visible_cells}")
         return visible_cells
 
     def make_observation(self, viewpoint):

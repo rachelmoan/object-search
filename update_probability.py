@@ -20,6 +20,8 @@ if __name__ == "__main__":
     last = pygame.time.get_ticks()
     cooldown = 300  
 
+    forward = True
+
     prob_map = env.get_prob_map()
 
     while True:
@@ -35,8 +37,8 @@ if __name__ == "__main__":
 
                 pygame.draw.rect(env.win,(0,0,0),(0,0,env.screen_height,env.screen_height))
                 
-                pygame.draw.rect(env.win,(100,0,0),(480,env.screen_height / 2,env.screen_height,env.screen_height))
-                pygame.draw.rect(env.win,(200,0,0),(480,-env.screen_height / 2,env.screen_height,env.screen_height))      
+                pygame.draw.rect(env.win,(100,0,0),(600,env.screen_height / 2,env.screen_height,env.screen_height))
+                pygame.draw.rect(env.win,(200,0,0),(600,-env.screen_height / 2,env.screen_height,env.screen_height))      
                 
                 
                 env.draw_map()
@@ -46,11 +48,11 @@ if __name__ == "__main__":
 
                 if env.obstacle_map[row][col]:
                     if forward == True:
-                        env.player_x -= -math.sin(env.player_angle) * 60
-                        env.player_y -= math.cos(env.player_angle) * 60
+                        env.player_x -= -math.sin(env.player_angle) * env.tile_size
+                        env.player_y -= math.cos(env.player_angle) * env.tile_size
                     else:
-                        env.player_x += -math.sin(env.player_angle) * 60
-                        env.player_y += math.cos(env.player_angle) * 60
+                        env.player_x += -math.sin(env.player_angle) * env.tile_size
+                        env.player_y += math.cos(env.player_angle) * env.tile_size
 
                 else:
                     if keys[pygame.K_LEFT]: 
@@ -59,12 +61,12 @@ if __name__ == "__main__":
                         env.player_angle += (1/2)*math.pi
                     if keys[pygame.K_UP]:
                         forward = True
-                        env.player_x += -math.sin(env.player_angle) * 60
-                        env.player_y += math.cos(env.player_angle) * 60
+                        env.player_x += -math.sin(env.player_angle) * env.tile_size
+                        env.player_y += math.cos(env.player_angle) * env.tile_size
                     if keys[pygame.K_DOWN]:
                         forward = False
-                        env.player_x -= -math.sin(env.player_angle) * 60
-                        env.player_y -= math.cos(env.player_angle) * 60
+                        env.player_x -= -math.sin(env.player_angle) * env.tile_size
+                        env.player_y -= math.cos(env.player_angle) * env.tile_size
                 
 
                 # For each movement, make an observation and update the map
