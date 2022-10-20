@@ -6,7 +6,7 @@ import math
 
 if __name__ == '__main__':
 
-    env = environment.Environment(display_environment=True, 
+    env = environment.Environment(display_environment=False, 
                  screen_height =480, 
                  fov=math.pi / 3, 
                  casted_rays=120, 
