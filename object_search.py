@@ -54,7 +54,7 @@ if __name__ == '__main__':
 
 
     # Execute the algorithm
-    alg = AStar(g, '60.0, 60.0', '300.0, 300.0')
+    alg = AStar(g, '48.0, 48.0', '288.0, 288.0')
 
     print(alg.start)
 

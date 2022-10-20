@@ -209,8 +209,6 @@ class Environment:
                                     ) 
                 '''
 
-
-
                 if ([row,col] not in visible_cells):
                     visible_cells.append([row,col])
     
@@ -231,7 +229,7 @@ class Environment:
             start_angle += self.step_angle
 
 
-        print(f"visible cells are {visible_cells}")
+        #print(f"visible cells are {visible_cells}")
         return visible_cells
 
     def make_observation(self, viewpoint):
@@ -256,6 +254,7 @@ class Environment:
     def update_map(self, viewpoint):
 
         cells_in_viewpoint = self.get_cells_in_viewpoint(viewpoint, 800, 480)
+        total_num_cells = len(cells_in_viewpoint)
 
         obs = self.make_observation(viewpoint)
 
@@ -264,14 +263,14 @@ class Environment:
             x = cell[0]
             y = cell[1]
 
-            # TODO:: Account for the probability that the object is not in this 
+            # Account for the probability that the object is not in this 
             # cell, but rather in one of the other cells that are within
             # the visibility of the viewpoint
 
-            pr_not_cell_given_obs_n1 = (1 -self.probability_matrix[x][y])*self.confusion[1][0]
-            pr_not_cell_given_obs_n0 = (1 -self.probability_matrix[x][y])*self.confusion[1][1]
-            pr_cell_given_obs_n1 = (self.probability_matrix[x][y]*self.confusion[0][0])
-            pr_cell_given_obs_n0 = (self.probability_matrix[x][y]*self.confusion[0][1])
+            pr_not_cell_given_obs_n1 = (1 -self.probability_matrix[x][y])*self.confusion[1][0]*((total_num_cells-1)/total_num_cells)
+            pr_not_cell_given_obs_n0 = (1 -self.probability_matrix[x][y])*self.confusion[1][1]*((total_num_cells-1)/total_num_cells)
+            pr_cell_given_obs_n1 = (self.probability_matrix[x][y]*self.confusion[0][0])*(1/total_num_cells)
+            pr_cell_given_obs_n0 = (self.probability_matrix[x][y]*self.confusion[0][1])*(1/total_num_cells)
             
             if(obs == 1):
                 prob = pr_cell_given_obs_n1 / (pr_cell_given_obs_n1 + pr_not_cell_given_obs_n1)
