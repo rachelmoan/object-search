@@ -123,7 +123,6 @@ class Environment:
                 pygame.draw.rect(self.win,
                                  (200,200,200) if self.obstacle_map[row][col]  else (100,100,100),
                                  (col * self.tile_size, row * self.tile_size, self.tile_size - 2, self.tile_size - 2)
-                    
                                 )  
 
     
