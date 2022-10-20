@@ -22,7 +22,7 @@ if __name__ == '__main__':
     length = env.map_length
     height = env.map_height
 
-    candidate_points = []
+    nodes_to_plan_with = []
 
     for i in range(height-1):
         print(i)
@@ -47,14 +47,19 @@ if __name__ == '__main__':
                 g.add_edge(f'{str(x2)}, {str(y2)}', f'{str(x2)}, {str(y1)}', 1)
 
 
+    all_nodes = []
+    for i in range(len(g.nodes)):
+        print(f'x = {g.nodes[i].x}, y = {g.nodes[i].y}, value = {g.nodes[i].value}')
+        if ([g.nodes[i].x, g.nodes[i].y, math.pi] not in all_nodes): all_nodes.append([g.nodes[i].x, g.nodes[i].y, math.pi])
 
-    #for i in range(len(g.nodes)):
-    #    print(f'x = {g.nodes[i].x}, y = {g.nodes[i].y}, value = {g.nodes[i].value}')
+    best = env.get_best_viewpoints(all_nodes)
+    for node in best:
+        nodes_to_plan_with.append(all_nodes[node[0]])
 
-
+    print(nodes_to_plan_with)
 
     # Execute the algorithm
-    alg = AStar(g, '60.0, 60.0', '300.0, 300.0')
+    alg = AStar(g, '48.0, 48.0', '384.0, 384.0')
 
     print(alg.start)
 
