@@ -59,7 +59,7 @@ if __name__ == '__main__':
     print(nodes_to_plan_with)
 
     # Execute the algorithm
-    alg = AStar(g, '48.0, 48.0', '384.0, 384.0')
+    alg = AStar(g, '48.0, 48.0', '288.0, 288.0')
 
     print(alg.start)
 
