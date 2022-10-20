@@ -279,3 +279,41 @@ class Environment:
             self.probability_matrix[x][y] = prob
 
         return 
+
+    def sort(self, sub_li):
+        l = len(sub_li)
+        for i in range(0, l):
+            for j in range(0, l-i-1):
+                if (sub_li[j][1] < sub_li[j + 1][1]):
+                    tempo = sub_li[j]
+                    sub_li[j]= sub_li[j + 1]
+                    sub_li[j + 1]= tempo
+        return sub_li
+
+    def get_best_viewpoints(self, candidate_viewpoints):
+        cand_view_probs = [] 
+
+        print(f'total num cands = {len(candidate_viewpoints)}')
+
+        for i in range(len(candidate_viewpoints)):
+            candidate = candidate_viewpoints[i]
+
+            # calculate the probability that we detect the object from this vantage point
+            total = 0
+
+            cells_in_viewpoint = self.get_cells_in_viewpoint(candidate, 800, 480)
+
+            for cell in cells_in_viewpoint:
+                total += self.probability_matrix[cell[0]][cell[1]]
+            
+            cand_view_probs.append([i,total ])
+
+        sorted_cands = self.sort(cand_view_probs)
+
+        best_five = sorted_cands[0:5]
+
+        print(f'the best 5 are {best_five}')
+
+        return best_five
+
+            
